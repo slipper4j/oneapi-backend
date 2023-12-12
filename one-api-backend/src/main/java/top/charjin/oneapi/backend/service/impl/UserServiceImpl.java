@@ -19,7 +19,7 @@ import top.charjin.oneapi.common.model.vo.AuthUserVO;
 import top.charjin.oneapi.common.model.vo.UserVO;
 import top.charjin.oneapi.common.service.UserAuthService;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;

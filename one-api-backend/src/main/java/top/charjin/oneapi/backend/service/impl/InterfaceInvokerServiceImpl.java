@@ -18,7 +18,7 @@ import top.charjin.oneapi.clientsdk.profile.HttpProfile;
 import top.charjin.oneapi.common.model.ErrorCode;
 import top.charjin.oneapi.common.model.entity.InterfaceInfo;
 
-import javax.el.MethodNotFoundException;
+import jakarta.el.MethodNotFoundException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Type;

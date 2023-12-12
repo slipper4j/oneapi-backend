@@ -14,8 +14,8 @@ import top.charjin.oneapi.clientsdk.profile.ClientProfile;
 import top.charjin.oneapi.clientsdk.profile.HttpProfile;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
 import java.security.SecureRandom;
 import java.util.HashMap;
 import java.util.Map;
@@ -231,9 +231,13 @@ public abstract class AbstractClient {
             return "";
         }
         StringBuilder queryString = new StringBuilder();
-        for (Map.Entry<String, String> entry : params.entrySet()) {
-            String v = URLEncoder.encode(entry.getValue(), StandardCharsets.UTF_8);
-            queryString.append("&").append(entry.getKey()).append("=").append(v);
+        try {
+            for (Map.Entry<String, String> entry : params.entrySet()) {
+                String v = URLEncoder.encode(entry.getValue(), "UTF-8");
+                queryString.append("&").append(entry.getKey()).append("=").append(v);
+            }
+        } catch (UnsupportedEncodingException e) {
+            throw new RuntimeException(e);
         }
         if (queryString.length() == 0) {
             return "";
@@ -254,11 +258,15 @@ public abstract class AbstractClient {
             return "";
         }
         StringBuilder strParam = new StringBuilder();
-        for (Map.Entry<String, String> entry : param.entrySet()) {
-            strParam.append(URLEncoder.encode(entry.getKey(), StandardCharsets.UTF_8))
-                    .append("=")
-                    .append(URLEncoder.encode(entry.getValue(), StandardCharsets.UTF_8))
-                    .append("&");
+        try {
+            for (Map.Entry<String, String> entry : param.entrySet()) {
+                strParam.append(URLEncoder.encode(entry.getKey(), "UTF-8"))
+                        .append("=")
+                        .append(URLEncoder.encode(entry.getValue(), "UTF-8"))
+                        .append("&");
+            }
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
         if (strParam.charAt(strParam.length() - 1) == '&') {
             strParam.deleteCharAt(strParam.length() - 1);

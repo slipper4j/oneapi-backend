@@ -29,7 +29,7 @@ import top.charjin.oneapi.common.model.vo.RequestParamsRemarkVO;
 import top.charjin.oneapi.common.model.vo.ResponseParamsRemarkVO;
 import top.charjin.oneapi.common.model.vo.UserVO;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 import java.util.*;
 import java.util.stream.Collectors;
 

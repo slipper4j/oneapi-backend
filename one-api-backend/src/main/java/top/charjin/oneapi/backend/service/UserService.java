@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import top.charjin.oneapi.common.model.entity.User;
 import top.charjin.oneapi.common.model.vo.UserVO;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**

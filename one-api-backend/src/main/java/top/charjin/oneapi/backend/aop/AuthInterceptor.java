@@ -1,5 +1,6 @@
 package top.charjin.oneapi.backend.aop;
 
+import jakarta.servlet.http.HttpServletRequest;
 import org.apache.commons.lang3.StringUtils;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -15,8 +16,6 @@ import top.charjin.oneapi.backend.model.enums.UserRoleEnum;
 import top.charjin.oneapi.backend.service.UserService;
 import top.charjin.oneapi.common.model.ErrorCode;
 import top.charjin.oneapi.common.model.entity.User;
-
-import javax.servlet.http.HttpServletRequest;
 
 /**
  * 权限校验 AOP

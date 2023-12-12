@@ -7,12 +7,11 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.data.redis.RedisAutoConfiguration;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.scheduling.annotation.EnableScheduling;
-import top.charjin.oneapi.clientsdk.OneApiClientAutoConfiguration;
 
 /**
  * 主类（项目启动入口）
  */
-@SpringBootApplication(exclude = {RedisAutoConfiguration.class, OneApiClientAutoConfiguration.class})
+@SpringBootApplication(exclude = {RedisAutoConfiguration.class})
 @MapperScan("top.charjin.oneapi.backend.mapper")
 @EnableScheduling
 @EnableAspectJAutoProxy(proxyTargetClass = true, exposeProxy = true)

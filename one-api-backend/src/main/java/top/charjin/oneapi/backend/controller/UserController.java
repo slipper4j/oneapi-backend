@@ -22,7 +22,7 @@ import top.charjin.oneapi.common.model.request.IdRequest;
 import top.charjin.oneapi.common.model.vo.UserVO;
 import top.charjin.oneapi.common.util.ResultUtils;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.stream.Collectors;
 

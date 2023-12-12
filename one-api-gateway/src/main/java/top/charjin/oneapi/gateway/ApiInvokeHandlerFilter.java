@@ -22,8 +22,8 @@ import top.charjin.oneapi.gateway.exception.BusinessException;
 import top.charjin.oneapi.gateway.http.AuthorizationParser;
 import top.charjin.oneapi.gateway.http.HttpProfile;
 
+import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 
@@ -64,7 +64,7 @@ public class ApiInvokeHandlerFilter implements GlobalFilter, Ordered {
         String nonce = headers.getFirst("X-Nonce");
         String timestamp = headers.getFirst("X-Timestamp");
 
-        String requestPayload = request.getMethodValue().equals(HttpProfile.REQ_POST) ? request.getBody().toString() : "";
+        String requestPayload = request.getMethod().name().equals(HttpProfile.REQ_POST) ? request.getBody().toString() : "";
 
         Map<String, String> headerMap = new HashMap<>();
         headerMap.put("X-AccessKey", accessKey);
@@ -86,7 +86,7 @@ public class ApiInvokeHandlerFilter implements GlobalFilter, Ordered {
 
         Map<String, String> params = request.getQueryParams().toSingleValueMap();
 
-        String canonicalQueryString = this.getCanonicalQueryString(params, request.getMethodValue());
+        String canonicalQueryString = this.getCanonicalQueryString(params, request.getMethod().name());
 
         String serverSignature = SignUtil.signParamsSha256(headerMap, canonicalQueryString + requestPayload + secretKey);
 
@@ -106,7 +106,7 @@ public class ApiInvokeHandlerFilter implements GlobalFilter, Ordered {
             throw new BusinessException(e.getMessage());
         }
 
-        InterfaceInfo interfaceInfo = userInterfaceInvokeService.getInterfaceInfo(request.getPath().value(), request.getMethodValue());
+        InterfaceInfo interfaceInfo = userInterfaceInvokeService.getInterfaceInfo(request.getPath().value(), request.getMethod().name());
 
         // 验证接口是否存在
         if (interfaceInfo == null) {
@@ -170,9 +170,13 @@ public class ApiInvokeHandlerFilter implements GlobalFilter, Ordered {
             return "";
         }
         StringBuilder queryString = new StringBuilder();
-        for (Map.Entry<String, String> entry : params.entrySet()) {
-            String v = URLEncoder.encode(entry.getValue(), StandardCharsets.UTF_8);
-            queryString.append("&").append(entry.getKey()).append("=").append(v);
+        try {
+            for (Map.Entry<String, String> entry : params.entrySet()) {
+                String v = URLEncoder.encode(entry.getValue(), "UTF-8");
+                queryString.append("&").append(entry.getKey()).append("=").append(v);
+            }
+        } catch (UnsupportedEncodingException e) {
+            throw new RuntimeException(e);
         }
         if (queryString.length() == 0) {
             return "";

@@ -9,7 +9,7 @@ import top.charjin.oneapi.backend.model.dto.interfaceinfo.InterfaceInfoUpdateReq
 import top.charjin.oneapi.common.model.entity.InterfaceInfo;
 import top.charjin.oneapi.common.model.vo.InterfaceInfoVO;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 
 /**
  * @author Zhichao

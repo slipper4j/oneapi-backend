@@ -3,7 +3,7 @@ spring:
     name: oneapi
   # 默认 dev 环境
   profiles:
-    active: dev
+    active: test
   # 支持 swagger3
   mvc:
     pathmatch:
@@ -19,8 +19,8 @@ spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3306/oneapi
-    username: root
-    password: root
+    username: dev
+    password: 123456
   # Redis 配置
 
   # 文件上传
@@ -53,4 +53,4 @@ dubbo:
     name: dubbo
     port: -1
   registry:
-    address: nacos://localhost:8848
+    address: nacos://43.142.4.174:8848
