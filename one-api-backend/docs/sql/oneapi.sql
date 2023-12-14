@@ -1,60 +1,51 @@
-create table if not exists oneapi.interface_info
+/*
+ Navicat Premium Data Transfer
+
+ Source Server         : 43.142.4.174
+ Source Server Type    : MySQL
+ Source Server Version : 80035 (8.0.35)
+ Source Host           : 43.142.4.174:3306
+ Source Schema         : oneapi
+
+ Target Server Type    : MySQL
+ Target Server Version : 80035 (8.0.35)
+ File Encoding         : 65001
+
+ Date: 14/12/2023 22:29:49
+*/
+
+SET NAMES utf8mb4;
+SET
+FOREIGN_KEY_CHECKS = 0;
+
+-- ----------------------------
+-- Table structure for interface_info
+-- ----------------------------
+DROP TABLE IF EXISTS `interface_info`;
+CREATE TABLE `interface_info`
 (
-    id                   bigint auto_increment primary key comment '主键',
-    name                 varchar(256)                       not null comment '名称',
-    description          varchar(256)                       null comment '描述',
-    url                  varchar(512)                       not null comment '接口地址',
-    host                 varchar(512)                       null comment '主机名',
-    requestParams        text                               null comment '请求参数',
-    requestParamsRemark  text                               null comment '请求参数说明',
-    responseParamsRemark text                               null comment '响应参数说明',
-    requestHeader        text                               null comment '请求头',
-    responseHeader       text                               null comment '响应头',
-    status               int      default 0                 not null comment '接口状态（0-关闭，1-开启）',
-    method               varchar(256)                       not null comment '请求类型',
-    userId               bigint                             not null comment '创建人',
-    createTime           datetime default CURRENT_TIMESTAMP not null comment '创建时间',
-    updateTime           datetime default CURRENT_TIMESTAMP not null on update CURRENT_TIMESTAMP comment '更新时间',
-    isDelete             tinyint  default 0                 not null comment '是否删除(0-未删, 1-已删)'
-)
-    comment '接口信息' charset = utf8mb4;
+    `id`                     bigint                                                        NOT NULL AUTO_INCREMENT COMMENT '主键',
+    `name`                   varchar(256) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '名称',
+    `description`            varchar(256) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '描述',
+    `url`                    varchar(512) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '接口地址',
+    `host`                   varchar(512) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '主机名',
+    `request_params`         text CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL COMMENT '请求参数',
+    `request_params_remark`  text CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL COMMENT '请求参数说明',
+    `response_params_remark` text CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL COMMENT '响应参数说明',
+    `request_header`         text CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL COMMENT '请求头',
+    `response_header`        text CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL COMMENT '响应头',
+    `status`                 int                                                           NOT NULL DEFAULT 0 COMMENT '接口状态（0-关闭，1-开启）',
+    `method`                 varchar(256) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '请求类型',
+    `user_id`                bigint                                                        NOT NULL COMMENT '创建人',
+    `create_time`            datetime                                                      NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    `update_time`            datetime                                                      NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+    `is_delete`              tinyint                                                       NOT NULL DEFAULT 0 COMMENT '是否删除(0-未删, 1-已删)',
+    PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 36 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '接口信息' ROW_FORMAT = Dynamic;
 
-
-create table if not exists oneapi.user
-(
-    id           bigint auto_increment primary key comment '主键',
-    userName     varchar(256) default '新用户'          null comment '用户昵称',
-    userAccount  varchar(256)                           not null comment '账号',
-    userAvatar   varchar(1024)                          null comment '用户头像',
-    gender       tinyint                                null comment '性别',
-    userRole     varchar(256) default 'user'            not null comment '用户角色：user / admin',
-    userPassword varchar(512)                           not null comment '密码',
-    accessKey    varchar(512)                           not null comment 'accessKey',
-    secretKey    varchar(512)                           not null comment 'secretKey',
-    createTime   datetime     default CURRENT_TIMESTAMP not null comment '创建时间',
-    updateTime   datetime     default CURRENT_TIMESTAMP not null on update CURRENT_TIMESTAMP comment '更新时间',
-    isDelete     tinyint      default 0                 not null comment '是否删除',
-    signature    varchar(256)                           null comment '签名',
-    constraint uni_userAccount
-        unique (userAccount)
-)
-    comment '用户' charset = utf8mb4;
-
-create table if not exists oneapi.user_interface_info
-(
-    id              bigint auto_increment primary key comment '主键',
-    userId          bigint                             not null comment '调用用户ID',
-    interfaceInfoId bigint                             not null comment '接口信息ID',
-    totalNum        int      default 0                 not null comment '总调用次数',
-    leftNum         int      default 0                 not null comment '剩余调用次数',
-    status          int      default 0                 not null comment '0-正常，1-禁用',
-    createTime      datetime default CURRENT_TIMESTAMP not null comment '创建时间',
-    updateTime      datetime default CURRENT_TIMESTAMP not null on update CURRENT_TIMESTAMP comment '更新时间',
-    isDelete        tinyint  default 0                 not null comment '是否删除(0-未删, 1-已删)'
-)
-    comment '用户调用接口关系表' charset = utf8mb4;
-
-
+-- ----------------------------
+-- Records of interface_info
+-- ----------------------------
 INSERT INTO `interface_info`
 VALUES (1, '获取当前用户名称', '获取用户名称', '/api/name/user', 'http://localhost:8090',
         '{\n    \"username\": \"nero\"\n}', NULL, NULL, '{\"Content-Type\": \"application/json\"}',
@@ -112,26 +103,86 @@ VALUES (34, '短网址生成', '将长网址进行缩短，支持百度、新浪
         '[{\"id\":1689004480035,\"name\":\"url\",\"isRequired\":\"yes\",\"type\":\"string\",\"remark\":\"需要进行缩短的长网址\"},{\"id\":1689004514429,\"name\":\"dwzapi\",\"isRequired\":\"no\",\"type\":\"string\",\"remark\":\"选择缩短接口[tcn|dwzcn|urlcn|suoim|mrwso|]\"}]',
         '[{\"id\":1689004538420,\"name\":\"code\",\"type\":\"string\",\"remark\":\"返回的状态码\"},{\"id\":1689004564886,\"name\":\"ae_url\",\"type\":\"string\",\"remark\":\"返回缩短后的短网址\"},{\"id\":1689004565428,\"name\":\"msg\",\"type\":\"string\",\"remark\":\"返回错误提示信息！\"}]',
         NULL, NULL, 1, 'GET/POST', 1667508636207661058, '2023-07-10 23:56:35', '2023-07-10 23:57:13', 0);
+INSERT INTO `interface_info`
+VALUES (35, '获取头像', '获取头像', '/api/avatar/cartoon', 'http://localhost:8090', NULL, NULL, NULL, NULL, NULL, 0,
+        'GET', 24, '2023-12-14 14:01:28', '2023-12-14 14:02:10', 0);
 
+-- ----------------------------
+-- Table structure for user
+-- ----------------------------
+DROP TABLE IF EXISTS `user`;
+CREATE TABLE `user`
+(
+    `id`            bigint                                                        NOT NULL AUTO_INCREMENT COMMENT '主键',
+    `user_name`     varchar(256) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT '新用户' COMMENT '用户昵称',
+    `user_account`  varchar(256) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '账号',
+    `user_avatar`   varchar(1024) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '用户头像',
+    `gender`        tinyint NULL DEFAULT NULL COMMENT '性别',
+    `user_role`     varchar(256) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT 'user' COMMENT '用户角色：user / admin',
+    `user_password` varchar(512) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '密码',
+    `access_key`    varchar(512) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT 'accessKey',
+    `secret_key`    varchar(512) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT 'secretKey',
+    `create_time`   datetime                                                      NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    `update_time`   datetime                                                      NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+    `is_delete`     tinyint                                                       NOT NULL DEFAULT 0 COMMENT '是否删除',
+    `signature`     varchar(256) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '签名',
+    PRIMARY KEY (`id`) USING BTREE,
+    UNIQUE INDEX `uni_userAccount`(`user_account` ASC) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 25 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '用户' ROW_FORMAT = Dynamic;
 
-insert into oneapi.user (id, userName, userAccount, userAvatar, gender, userRole, userPassword, accessKey, secretKey,
-                         createTime, updateTime, isDelete, signature)
-values (4, '心跳', 'oneapi', 'http://yuque.heshuoshi.top/html5/QQ%E5%9B%BE%E7%89%8720230217132131.jpg', null, 'admin',
-        '1ed88763c7810ef2b1e68c0c2c5042e7', 'a84b6f645d6b5bc6b66a253545f19eee', '36484fddc396bf8e4cc1769339532196',
-        '2023-02-21 15:54:22', '2023-05-06 19:43:01', 0, '泰裤辣！！！'),
-       (24, '新用户', 'admin', 'http://yuque.heshuoshi.top/html5/IMG_1364(20230426-213630).JPG', null, 'user',
-        'dabefb0d00e9150f7df3e99ad6f1e45b', '7947c27ca461385c52d38c1a696ec196', '2c9bab9f7506e43b58ed68b11d607341',
-        '2023-05-09 00:17:25', '2023-05-09 00:17:25', 0, null);
+-- ----------------------------
+-- Records of user
+-- ----------------------------
+INSERT INTO `user`
+VALUES (4, '心跳', 'oneapi', 'http://yuque.heshuoshi.top/html5/QQ%E5%9B%BE%E7%89%8720230217132131.jpg', NULL, 'admin',
+        '57df50652cfa976dc79468675a96933a', 'a84b6f645d6b5bc6b66a253545f19eee', '36484fddc396bf8e4cc1769339532196',
+        '2023-02-21 15:54:22', '2023-12-14 13:47:48', 0, '泰裤辣！！！');
+INSERT INTO `user`
+VALUES (24, '新用户', 'admin', 'http://yuque.heshuoshi.top/html5/IMG_1364(20230426-213630).JPG', NULL, 'user',
+        '57df50652cfa976dc79468675a96933a', '7947c27ca461385c52d38c1a696ec196', '2c9bab9f7506e43b58ed68b11d607341',
+        '2023-05-09 00:17:25', '2023-12-14 13:47:43', 0, NULL);
 
-insert into oneapi.user_interface_info (id, userId, interfaceInfoId, totalNum, leftNum, status, createTime,
-                                        updateTime, isDelete)
-values (1, 4, 1, 174, 19861, 0, '2022-12-09 14:29:15', '2023-05-20 15:23:22', 0),
-       (2, 3, 2, 13, 5, 0, '2023-04-27 09:18:49', '2023-04-27 09:18:49', 0),
-       (4, 2, 3, 12, 3, 0, '2023-04-27 09:18:49', '2023-04-27 09:18:49', 0),
-       (6, 3, 4, 1, 6, 0, '2023-04-27 09:18:49', '2023-04-27 09:18:49', 0),
-       (7, 4, 3, 64, 18926, 0, '2023-04-27 09:18:49', '2023-05-11 15:23:39', 0),
-       (8, 4, 2, 237, 9863, 0, '2022-12-09 14:29:15', '2023-05-29 10:30:22', 0),
-       (9, 14, 1, 0, 100, 0, '2023-05-08 23:32:11', '2023-05-08 23:32:11', 0),
-       (10, 22, 1, 0, 100, 0, '2023-05-09 00:13:30', '2023-05-09 00:13:30', 0),
-       (11, 23, 1, 0, 100, 0, '2023-05-09 00:14:28', '2023-05-09 00:14:28', 0),
-       (12, 24, 1, 0, 100, 0, '2023-05-09 00:17:28', '2023-05-09 00:17:28', 0);
+-- ----------------------------
+-- Table structure for user_interface_info
+-- ----------------------------
+DROP TABLE IF EXISTS `user_interface_info`;
+CREATE TABLE `user_interface_info`
+(
+    `id`                bigint   NOT NULL AUTO_INCREMENT COMMENT '主键',
+    `user_id`           bigint   NOT NULL COMMENT '调用用户ID',
+    `interface_info_id` bigint   NOT NULL COMMENT '接口信息ID',
+    `total_num`         int      NOT NULL DEFAULT 0 COMMENT '总调用次数',
+    `left_num`          int      NOT NULL DEFAULT 0 COMMENT '剩余调用次数',
+    `status`            int      NOT NULL DEFAULT 0 COMMENT '0-正常，1-禁用',
+    `create_time`       datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    `update_time`       datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+    `is_delete`         tinyint  NOT NULL DEFAULT 0 COMMENT '是否删除(0-未删, 1-已删)',
+    PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 13 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '用户调用接口关系表' ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of user_interface_info
+-- ----------------------------
+INSERT INTO `user_interface_info`
+VALUES (1, 4, 1, 174, 19861, 0, '2022-12-09 14:29:15', '2023-05-20 15:23:22', 0);
+INSERT INTO `user_interface_info`
+VALUES (2, 3, 2, 13, 5, 0, '2023-04-27 09:18:49', '2023-04-27 09:18:49', 0);
+INSERT INTO `user_interface_info`
+VALUES (4, 2, 3, 12, 3, 0, '2023-04-27 09:18:49', '2023-04-27 09:18:49', 0);
+INSERT INTO `user_interface_info`
+VALUES (6, 3, 4, 1, 6, 0, '2023-04-27 09:18:49', '2023-04-27 09:18:49', 0);
+INSERT INTO `user_interface_info`
+VALUES (7, 4, 3, 64, 18926, 0, '2023-04-27 09:18:49', '2023-05-11 15:23:39', 0);
+INSERT INTO `user_interface_info`
+VALUES (8, 4, 2, 237, 9863, 0, '2022-12-09 14:29:15', '2023-05-29 10:30:22', 0);
+INSERT INTO `user_interface_info`
+VALUES (9, 14, 1, 0, 100, 0, '2023-05-08 23:32:11', '2023-05-08 23:32:11', 0);
+INSERT INTO `user_interface_info`
+VALUES (10, 22, 1, 0, 100, 0, '2023-05-09 00:13:30', '2023-05-09 00:13:30', 0);
+INSERT INTO `user_interface_info`
+VALUES (11, 23, 1, 0, 100, 0, '2023-05-09 00:14:28', '2023-05-09 00:14:28', 0);
+INSERT INTO `user_interface_info`
+VALUES (12, 24, 1, 0, 100, 0, '2023-05-09 00:17:28', '2023-05-09 00:17:28', 0);
+
+SET
+FOREIGN_KEY_CHECKS = 1;
