@@ -3,6 +3,7 @@ package top.charjin.oneapi.backend.controller;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
@@ -29,7 +30,6 @@ import top.charjin.oneapi.common.model.vo.InterfaceInvokeInfoVo;
 import top.charjin.oneapi.common.model.vo.SelfInterfaceDateVo;
 import top.charjin.oneapi.common.util.ResultUtils;
 
-import jakarta.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -65,7 +65,7 @@ public class UserInterfaceInfoController {
         UserInterfaceInfo userInterfaceInfo = new UserInterfaceInfo();
         BeanUtils.copyProperties(userInterfaceInfoAddRequest, userInterfaceInfo);
 
-        long count = userInterfaceInfoService.count(new QueryWrapper<>(userInterfaceInfo));
+        long count = userInterfaceInfoService.count(new LambdaQueryWrapper<>(userInterfaceInfo));
         if (count != 0) {
             throw new BusinessException(ErrorCode.OPERATION_ERROR, "用户已开通该接口");
         }
@@ -158,7 +158,7 @@ public class UserInterfaceInfoController {
         if (userInterfaceInfoQueryRequest != null) {
             BeanUtils.copyProperties(userInterfaceInfoQueryRequest, userInterfaceInfoQuery);
         }
-        QueryWrapper<UserInterfaceInfo> queryWrapper = new QueryWrapper<>(userInterfaceInfoQuery);
+        LambdaQueryWrapper<UserInterfaceInfo> queryWrapper = new LambdaQueryWrapper<>(userInterfaceInfoQuery);
         List<UserInterfaceInfo> userInterfaceInfoList = userInterfaceInfoService.list(queryWrapper);
         return ResultUtils.success(userInterfaceInfoList);
     }
@@ -234,14 +234,14 @@ public class UserInterfaceInfoController {
         int rechargeCount = rechargeRequest.getRechargeCount();
 
         // 先根据用户名判断用户是否存在，然后在 UserInterfaceInfo 中查看是否存在该记录，如果不存在则插入，如果存在则修改
-        User user = userService.getOne(new QueryWrapper<User>().eq("userAccount", userAccount));
+        User user = userService.getOne(new LambdaQueryWrapper<User>().eq(User::getUserAccount, userAccount));
         if (user == null) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR, "用户不存在");
         }
         UserInterfaceInfo userInterfaceInfo = userInterfaceInfoService.getOne(
-                new QueryWrapper<UserInterfaceInfo>()
-                        .eq("userId", user.getId())
-                        .eq("interfaceInfoId", interfaceInfoId));
+                new LambdaQueryWrapper<UserInterfaceInfo>()
+                        .eq(UserInterfaceInfo::getUserId, user.getId())
+                        .eq(UserInterfaceInfo::getInterfaceInfoId, interfaceInfoId));
         if (userInterfaceInfo == null) {
             userInterfaceInfo = new UserInterfaceInfo();
             userInterfaceInfo.setUserId(user.getId());
